@@ -2,8 +2,10 @@ package otelslog_test
 
 import (
 	"context"
+	"io"
 	"log/slog"
 	"os"
+	"testing"
 	"time"
 
 	"go.opentelemetry.io/otel/trace"
@@ -57,4 +59,11 @@ func ExampleHandler() {
 	logger.InfoContext(ctx, "hello world")
 
 	// Output: time=0001-01-01T00:00:00.000Z level=INFO msg="hello world" trace_id=74726163655f69645f74657374313233 span_id=7370616e5f696431
+}
+
+func TestHandler_Handle_NoSpan(t *testing.T) {
+	handler := otelslog.NewHandler(slog.NewJSONHandler(io.Discard, nil))
+	logger := slog.New(handler)
+
+	logger.InfoContext(context.Background(), "hello world")
 }
