@@ -1,7 +1,8 @@
 # OpenTelemetry handler
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/go-slog/otelslog/ci.yaml?style=flat-square)](https://github.com/go-slog/otelslog/actions/workflows/ci.yaml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/go-slog/otelslog/badge?style=flat-square)](https://api.securityscorecards.dev/projects/github.com/go-slog/otelslog)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/mod/github.com/go-slog/otelslog)
+![Go Version](https://img.shields.io/badge/go%20version-%3E=1.21-61CFDD.svg?style=flat-square)
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
 **[log/slog](https://pkg.go.dev/log/slog) handler attaching OpenTelemetry trace details to logs.**
