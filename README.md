@@ -34,6 +34,12 @@ var handler slog.Handler
 handler = otelslog.NewHandler(handler)
 
 logger := slog.New(handler)
+
+// Call logger with a context
+
+logger.InfoContext(ctx, "hello world")
+
+// Output: level=INFO msg="hello world" trace_id=74726163655f69645f74657374313233 span_id=7370616e5f696431
 ```
 
 Use it as a middleware in [slogmulti.Pipe](https://pkg.go.dev/github.com/samber/slog-multi#Pipe):
