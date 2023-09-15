@@ -3,6 +3,7 @@ package otelslog
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 
 	"go.opentelemetry.io/otel/trace"
@@ -37,6 +38,10 @@ type Handler struct {
 
 // Handle implements [slog.Handler].
 func (h Handler) Handle(ctx context.Context, record slog.Record) error {
+	if h.Handler == nil {
+		return errors.New("otelslog: handler is missing")
+	}
+
 	spanCtx := trace.SpanContextFromContext(ctx)
 
 	if spanCtx.HasTraceID() {
@@ -52,10 +57,18 @@ func (h Handler) Handle(ctx context.Context, record slog.Record) error {
 
 // WithAttrs implements [slog.Handler].
 func (h Handler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	if h.Handler == nil {
+		return h
+	}
+
 	return Handler{h.Handler.WithAttrs(attrs)}
 }
 
 // WithGroup implements [slog.Handler].
 func (h Handler) WithGroup(name string) slog.Handler {
+	if h.Handler == nil {
+		return h
+	}
+
 	return Handler{h.Handler.WithGroup(name)}
 }
