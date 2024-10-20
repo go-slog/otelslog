@@ -14,9 +14,6 @@ func ExampleWithResource() {
 	// Set up handler
 	handler := testHandler()
 
-	// Set up logger
-	logger := slog.New(handler)
-
 	res, _ := resource.New(
 		context.Background(),
 		resource.WithAttributes(
@@ -27,8 +24,11 @@ func ExampleWithResource() {
 		),
 	)
 
-	// Attach resource details to logger
-	logger = otelslog.WithResource(logger, res)
+	// Attach resource details to handler
+	handler = otelslog.WithResource(handler, res)
+
+	// Set up logger
+	logger := slog.New(handler)
 
 	// Call logger
 	logger.Info("hello world")

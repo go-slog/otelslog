@@ -7,13 +7,23 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 )
 
-// WithResource returns an [slog.Logger] with all attributes attached from a [resource.Resource].
-func WithResource(logger *slog.Logger, res *resource.Resource) *slog.Logger {
+// ResourceMiddleware returns a [Middleware] for an [slogmulti.Pipe] handler attaching resource attributes to an [slog.Handler].
+//
+// [Middleware]: https://pkg.go.dev/github.com/samber/slog-multi#Middleware
+// [slogmulti.Pipe]: https://pkg.go.dev/github.com/samber/slog-multi#Pipe
+func ResourceMiddleware(res *resource.Resource) func(slog.Handler) slog.Handler {
+	return func(handler slog.Handler) slog.Handler {
+		return WithResource(handler, res)
+	}
+}
+
+// WithResource returns an [slog.Handler] with all attributes attached from a [resource.Resource].
+func WithResource(handler slog.Handler, res *resource.Resource) slog.Handler {
 	if res.Len() == 0 {
-		return logger
+		return handler
 	}
 
-	attrs := make([]any, 0, res.Len())
+	attrs := make([]slog.Attr, 0, res.Len())
 
 	for iter := res.Iter(); iter.Next(); {
 		curr := iter.Attribute()
@@ -21,7 +31,7 @@ func WithResource(logger *slog.Logger, res *resource.Resource) *slog.Logger {
 		attrs = append(attrs, slog.Any(string(curr.Key), mapAttributeValue(curr.Value)))
 	}
 
-	return logger.With(attrs...)
+	return handler.WithAttrs(attrs)
 }
 
 func mapAttributeValue(v attribute.Value) slog.Value {
