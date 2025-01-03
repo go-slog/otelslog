@@ -7,6 +7,8 @@
 
 **[log/slog](https://pkg.go.dev/log/slog) handler attaching OpenTelemetry trace details to logs.**
 
+> [!TIP]
+> You might want to consider using the [slog->OTEL bridge](https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/bridges/otelslog) instead.
 
 ## Installation
 
